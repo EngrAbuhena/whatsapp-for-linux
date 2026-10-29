@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+# Create CLI launcher (electron-builder's default postinst was replaced by this file)
+ln -sf "/opt/WhatsApp-for-Linux/whatsapp-for-linux" /usr/bin/whatsapp-for-linux
+update-desktop-database /usr/share/applications 2>/dev/null || true
+gtk-update-icon-cache /usr/share/icons/hicolor 2>/dev/null || true
+# Chrome sandbox permissions
+chmod 4755 "/opt/WhatsApp-for-Linux/chrome-sandbox" 2>/dev/null || true
+exit 0

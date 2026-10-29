@@ -1,0 +1,111 @@
+{
+  "name": "whatsapp-for-linux",
+  "version": "1.0.2",
+  "description": "An unofficial, open-source WhatsApp Desktop client for Ubuntu & Linux \u2014 fast, native-feeling, and private.",
+  "main": "src/main.js",
+  "author": "EngrAbuhena <EngrAbuhena@users.noreply.github.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/EngrAbuhena/whatsapp-for-linux",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EngrAbuhena/whatsapp-for-linux.git"
+  },
+  "bugs": {
+    "url": "https://github.com/EngrAbuhena/whatsapp-for-linux/issues"
+  },
+  "keywords": [
+    "whatsapp",
+    "linux",
+    "ubuntu",
+    "electron",
+    "desktop",
+    "messenger"
+  ],
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "lint": "node --check src/main.js && node --check src/preload.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:deb": "electron-builder --linux deb",
+    "dist:appimage": "electron-builder --linux AppImage",
+    "dist:snap": "electron-builder --linux snap",
+    "dist:all": "electron-builder --linux deb AppImage snap",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "io.github.whatsapp_for_linux",
+    "productName": "WhatsApp-for-Linux",
+    "copyright": "Copyright \u00a9 2026",
+    "asar": true,
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "AppImage",
+        "snap"
+      ],
+      "category": "Network;Chat;InstantMessaging",
+      "icon": "build/icons",
+      "maintainer": "EngrAbuhena <EngrAbuhena@users.noreply.github.com>",
+      "vendor": "WhatsApp for Linux Contributors",
+      "synopsis": "Unofficial WhatsApp Desktop for Linux",
+      "description": "A fast, native-feeling unofficial WhatsApp client for Ubuntu and Linux with tray, unread badge, notifications, autostart and spellcheck.",
+      "desktop": {
+        "Name": "WhatsApp for Linux",
+        "Comment": "Unofficial WhatsApp Desktop client for Linux",
+        "Categories": "Network;Chat;InstantMessaging;",
+        "Keywords": "whatsapp;chat;message;messenger;",
+        "StartupWMClass": "whatsapp-for-linux"
+      },
+      "executableName": "whatsapp-for-linux"
+    },
+    "deb": {
+      "depends": [
+        "libgtk-3-0",
+        "libnotify4",
+        "libnss3",
+        "libxss1",
+        "libxtst6",
+        "xdg-utils",
+        "libatspi2.0-0",
+        "libuuid1"
+      ],
+      "afterInstall": "build/debian/postinst",
+      "afterRemove": "build/debian/postrm"
+    },
+    "snap": {
+      "confinement": "strict",
+      "grade": "stable",
+      "summary": "Unofficial WhatsApp Desktop for Linux",
+      "plugs": [
+        "default",
+        "camera",
+        "audio-record",
+        "audio-playback"
+      ]
+    },
+    "appImage": {
+      "license": "LICENSE"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "EngrAbuhena",
+        "repo": "whatsapp-for-linux"
+      }
+    ]
+  }
+}

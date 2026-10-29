@@ -1,0 +1,31 @@
+app-id: io.github.whatsapp_for_linux
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: '23.08'
+command: whatsapp-for-linux
+separate-locales: false
+finish-args:
+  - --share=ipc
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --socket=pulseaudio
+  - --share=network
+  - --device=all
+  - --filesystem=home
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=com.canonical.indicator.application
+  - --talk-name=org.ayatana.indicator.application
+modules:
+  - name: whatsapp-for-linux
+    buildsystem: simple
+    build-commands:
+      # Expects the electron-builder --dir output staged by CI (see flatpak/README.md)
+      - install -Dm755 whatsapp-for-linux /app/bin/whatsapp-for-linux
+      - install -Dm644 io.github.whatsapp_for_linux.desktop /app/share/applications/io.github.whatsapp_for_linux.desktop
+      - install -Dm644 icon-512.png /app/share/icons/hicolor/512x512/apps/io.github.whatsapp_for_linux.png
+    sources:
+      - type: dir
+        path: ../release/linux-unpacked

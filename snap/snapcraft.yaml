@@ -1,0 +1,28 @@
+name: whatsapp-for-linux
+version: '1.0.0'
+summary: Unofficial WhatsApp Desktop for Linux
+description: |
+  A fast, native-feeling unofficial WhatsApp client for Ubuntu and Linux
+  with system tray, unread badge, native notifications, autostart and spellcheck.
+  Not affiliated with WhatsApp LLC or Meta.
+base: core22
+confinement: strict
+grade: stable
+adopt-info: app
+
+apps:
+  whatsapp-for-linux:
+    command: whatsapp-for-linux --no-sandbox
+    desktop: share/applications/io.github.whatsapp_for_linux.desktop
+    environment:
+      TMPDIR: $XDG_RUNTIME_DIR
+    plugs: [home, network, desktop, desktop-legacy, wayland, x11, unity7, browser-support, camera, audio-record, audio-playback, gsettings, opengl]
+
+parts:
+  app:
+    plugin: nil
+    source: ../release
+    override-build: |
+      # Build first with: npm run dist -- --linux dir (or unpack the .deb here)
+      craftctl default
+    stage-packages: [libgtk-3-0, libnotify4, libnss3, libxss1, libxtst6, libatspi2.0-0]

@@ -1,0 +1,42 @@
+name: Build & Release
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: |
+          npm ci
+          sudo apt-get update && sudo apt-get install -y rpm fakeroot dpkg snapcraft --no-install-recommends || true
+      - name: Lint
+        run: npm run lint
+      - name: Build .deb + AppImage
+        run: npm run dist -- --linux deb AppImage
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: whatsapp-for-linux-linux
+          path: |
+            release/*.deb
+            release/*.AppImage
+      - name: Publish GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/*.deb
+            release/*.AppImage

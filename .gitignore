@@ -1,0 +1,9 @@
+node_modules/
+release/
+dist/
+*.snap
+prime/
+parts/
+stage/
+__pycache__/
+.DS_Store
